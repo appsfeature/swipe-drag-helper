@@ -1,0 +1,2 @@
+include ':app', ':swipedrag'
+rootProject.name='swipe-drag-helper'
