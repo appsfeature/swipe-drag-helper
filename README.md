@@ -2,6 +2,10 @@
 
 An Android Library that provide drag & drop and swipe-to-dismiss with list state maintain functionality for RecyclerView items 
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/appsfeature/swipe-drag-helper/master/screenshots/preview_sample.gif" alt="Preview 1" width="200" />  
+</p>
+
 ## Setup Project
 
 Add this to your project build.gradle
