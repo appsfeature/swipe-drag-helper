@@ -1,6 +1,10 @@
 package com.droidhelios.swipedraghelper;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +29,7 @@ public class SecondExampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
+        ImageView imageView = findViewById(R.id.imageview_profile);
         RecyclerView userRecyclerView = findViewById(R.id.recyclerview_user_list);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AdvanceListAdapter(this);
@@ -36,6 +41,15 @@ public class SecondExampleActivity extends AppCompatActivity {
 
         usersList = getHomePageList();
         adapter.setUserList(usersList);
+
+//        imageView.setImageDrawable(findDrawableByName(this, "ic_action_reorder"));
+    }
+
+    private Drawable findDrawableByName(Context context, String drawableName) {
+        Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier(drawableName, "drawable",
+                context.getPackageName());
+        return resources.getDrawable(resourceId);
     }
 
 

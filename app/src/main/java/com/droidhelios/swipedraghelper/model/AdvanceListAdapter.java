@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -105,7 +106,6 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         ImageView userAvatar;
         TextView username, tvChangePosition;
-        int position;
 
         SecondViewHolder(View itemView) {
             super(itemView);
@@ -113,13 +113,19 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             username = itemView.findViewById(R.id.textview_name);
             tvChangePosition = itemView.findViewById(R.id.tv_change_position);
             tvChangePosition.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            isActiveChangePosition = !isActiveChangePosition;
-            changeItemViewHolder = SecondViewHolder.this;
-            setDragTouchListener(SecondViewHolder.this);
+            if(view.getId() == R.id.tv_change_position) {
+                isActiveChangePosition = !isActiveChangePosition;
+                changeItemViewHolder = SecondViewHolder.this;
+                setDragTouchListener(SecondViewHolder.this);
+            }else {
+                User item = usersList.get(getAdapterPosition());
+                Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
