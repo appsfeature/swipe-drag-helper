@@ -1,6 +1,6 @@
 # SwipeDragHelper 
 
-An Android Library that provide drag & drop and swipe-to-dismiss functionality for RecyclerView items 
+An Android Library that provide drag & drop and swipe-to-dismiss with list state maintain functionality for RecyclerView items 
 
 ## Setup Project
 
