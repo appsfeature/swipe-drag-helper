@@ -31,14 +31,11 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case USER_TYPE:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.layout_user_list_item_one, parent, false);
-                return new UserViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.layout_user_list_section_header, parent, false);
                 return new SectionHeaderViewHolder(view);
+            case USER_TYPE:
             default:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.layout_user_list_item_one, parent, false);

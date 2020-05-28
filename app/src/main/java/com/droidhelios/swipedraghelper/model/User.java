@@ -1,5 +1,7 @@
 package com.droidhelios.swipedraghelper.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Created by Abhijit Rao on 20-11-2019.
  */
 
-public class User {
+public class User implements Cloneable{
 
     @SerializedName("id")
     @Expose
@@ -24,6 +26,16 @@ public class User {
     @SerializedName("type")
     @Expose
     private String type;
+
+    @SerializedName("ranking")
+    @Expose
+    private int ranking;
+
+    @Expose
+    private boolean changePosition = false;
+
+    public User() {
+    }
 
     public User(int id, String name, String imageUrl, String type) {
         this.id = id;
@@ -53,5 +65,35 @@ public class User {
 
     public String getType() {
         return type;
+    }
+
+    public int getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
+    }
+
+    public boolean isChangePosition() {
+        return changePosition;
+    }
+
+    public void setChangePosition(boolean changePosition) {
+        this.changePosition = changePosition;
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public User getClone() {
+        try {
+            return (User) clone();
+        } catch (CloneNotSupportedException e) {
+            return new User();
+        }
     }
 }

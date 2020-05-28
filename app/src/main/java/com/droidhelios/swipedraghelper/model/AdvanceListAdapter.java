@@ -42,14 +42,11 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case USER_TYPE:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.layout_user_list_item_two, parent, false);
-                return new SecondViewHolder(view);
             case HEADER_TYPE:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.layout_user_list_section_header, parent, false);
                 return new SectionHeaderViewHolder(view);
+            case USER_TYPE:
             default:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.layout_user_list_item_two, parent, false);
@@ -65,10 +62,7 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             SecondViewHolder viewHolder = (SecondViewHolder) holder;
             viewHolder.username.setText(usersList.get(position).getName());
             Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);
-
-            if(isActiveChangePosition && changeItemViewHolder!=null){
-                startDragAnimation(changeItemViewHolder.itemView);
-            }
+            viewHolder.setDragTouchListener(viewHolder, usersList.get(position));
         } else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
             headerViewHolder.sectionTitle.setText(usersList.get(position).getType());
@@ -94,8 +88,6 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    public boolean isActiveChangePosition = false;
-    private SecondViewHolder changeItemViewHolder;
 
 
     private void startDragAnimation(View view) {
@@ -118,10 +110,15 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
+            final int position = getAdapterPosition();
             if(view.getId() == R.id.tv_change_position) {
-                isActiveChangePosition = !isActiveChangePosition;
-                changeItemViewHolder = SecondViewHolder.this;
-                setDragTouchListener(SecondViewHolder.this);
+                usersList.get(position).setChangePosition(!usersList.get(position).isChangePosition());
+                //add this method for disable click when drag option is active
+//                subAdapter.setChangePosition(usersList.get(position).isChangePosition());
+                setDragTouchListener(SecondViewHolder.this, usersList.get(position));
+                if (usersList.get(position).isChangePosition()) {
+                    Toast.makeText(context,"Drag and drop where you want.", Toast.LENGTH_SHORT).show();
+                }
             }else {
                 User item = usersList.get(getAdapterPosition());
                 Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();
@@ -138,9 +135,9 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        public void setDragTouchListener(SecondViewHolder viewHolder) {
-            viewHolder.tvChangePosition.setText(isActiveChangePosition ? "Stop" : "Change Position");
-            if (isActiveChangePosition) {
+        public void setDragTouchListener(SecondViewHolder viewHolder, User item) {
+            viewHolder.tvChangePosition.setText(item.isChangePosition() ? "Stop" : "Change Position");
+            if (item.isChangePosition()) {
                 viewHolder.itemView.setOnTouchListener(this);
                 startDragAnimation(viewHolder.itemView);
             } else {
@@ -153,19 +150,25 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {
-        User targetUser = usersList.get(oldPosition);
-        User user = new User(targetUser);
+        User newItem = usersList.get(oldPosition);
+        User oldItem = usersList.get(newPosition);
+        int oldPos = oldItem.getRanking();
+        oldItem.setRanking(newItem.getRanking());
+        newItem.setRanking(oldPos);
+        newItem.setChangePosition(false);
+
+        User item = newItem.getClone();
         usersList.remove(oldPosition);
-        usersList.add(newPosition, user);
+        usersList.add(newPosition, item);
         notifyItemMoved(oldPosition, newPosition);
 
         swipeDragHelper.getListUtil().saveHomePageList(context, usersList, new TypeToken<List<User>>() {
         });
-        viewHolder.itemView.clearAnimation();
         if (viewHolder instanceof SecondViewHolder) {
             SecondViewHolder holder = (SecondViewHolder) viewHolder;
-            isActiveChangePosition = false;
-            holder.setDragTouchListener(holder);
+            holder.itemView.clearAnimation();
+//            holder.subAdapter.setChangePosition(false);
+            holder.setDragTouchListener(holder, newItem);
         }
     }
 
