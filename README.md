@@ -83,34 +83,102 @@ In your Adapter class:
 #### Usage method
 ```java 
 public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
-        CopySwipeDragHelper.SwipeDragActionListener { 
-        
+        SwipeDragActionListener { 
         ...
         ... 
+        
+    private SwipeDragHelper swipeDragHelper;
+
+    public void setSwipeDragHelper(SwipeDragHelper swipeDragHelper) {
+        this.swipeDragHelper = swipeDragHelper;
+    }
 
     @Override
     @SuppressLint("ClickableViewAccessibility")
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
+        SecondViewHolder viewHolder = (SecondViewHolder) holder;
         ...
         ...
-        ((UserViewHolder) holder).itemView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        swipeAndDragHelper.getTouchHelper().startDrag(holder);
-                    }
-                    return false;
-                }
-            });
+        
+        viewHolder.setDragTouchListener(viewHolder, usersList.get(position));
     } 
+    
+    public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener{
+
+        ...
+        ...
+        TextView tvChangePosition;
+
+        SecondViewHolder(View itemView) {
+            super(itemView); 
+            ...
+            ...
+            tvChangePosition = itemView.findViewById(R.id.tv_change_position);
+            tvChangePosition.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            final int position = getAdapterPosition();
+            if(view.getId() == R.id.tv_change_position) {
+                usersList.get(position).setChangePosition(!usersList.get(position).isChangePosition());
+                //add this method for disable click when drag option is active
+//                subAdapter.setChangePosition(usersList.get(position).isChangePosition());
+                setDragTouchListener(SecondViewHolder.this, usersList.get(position));
+                if (usersList.get(position).isChangePosition()) {
+                    Toast.makeText(context,"Drag and drop where you want.", Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                User item = usersList.get(getAdapterPosition());
+                Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        @SuppressLint("ClickableViewAccessibility")
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                swipeDragHelper.getTouchHelper().startDrag(SecondViewHolder.this);
+            }
+            return false;
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        public void setDragTouchListener(SecondViewHolder viewHolder, User item) {
+            viewHolder.tvChangePosition.setText(item.isChangePosition() ? "Stop" : "Change Position");
+            if (item.isChangePosition()) {
+                viewHolder.itemView.setOnTouchListener(this);
+                startDragAnimation(viewHolder.itemView);
+            } else {
+                viewHolder.itemView.setOnTouchListener(null);
+                viewHolder.itemView.clearAnimation();
+            }
+        }
+    }
 
     @Override
     public void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {
-        User targetUser = usersList.get(oldPosition);
-        User user = new User(targetUser);
+        User newItem = usersList.get(oldPosition);
+        User oldItem = usersList.get(newPosition);
+        int oldPos = oldItem.getRanking();
+        oldItem.setRanking(newItem.getRanking());
+        newItem.setRanking(oldPos);
+        newItem.setChangePosition(false);
+
+        User item = newItem.getClone();
         usersList.remove(oldPosition);
-        usersList.add(newPosition, user);
+        usersList.add(newPosition, item);
         notifyItemMoved(oldPosition, newPosition);
+
+        swipeDragHelper.getListUtil().saveHomePageList(context, usersList, new TypeToken<List<User>>() {
+        });
+        if (viewHolder instanceof SecondViewHolder) {
+            SecondViewHolder holder = (SecondViewHolder) viewHolder;
+            holder.itemView.clearAnimation();
+//            holder.subAdapter.setChangePosition(false);
+            holder.setDragTouchListener(holder, newItem);
+        }
     }
 
     @Override
@@ -119,11 +187,6 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemRemoved(position);
     }
 
-    private CopySwipeDragHelper swipeAndDragHelper;
-
-    public void setSwipeAndDragHelper(CopySwipeDragHelper swipeAndDragHelper) {
-        this.swipeAndDragHelper = swipeAndDragHelper;
-    }
 }
                                 
 ```
