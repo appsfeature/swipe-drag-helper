@@ -1,0 +1,427 @@
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\nandroid {\r\n    compileSdkVersion 28\r\n    defaultConfig {\r\n        applicationId \"com.droidhelios.swipedraghelper\"\r\n        minSdkVersion 15\r\n        targetSdkVersion 28\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation \"androidx.appcompat:appcompat:$rootProject.ext.appcompat\"\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    implementation 'androidx.recyclerview:recyclerview:1.0.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.1'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'\r\n\r\n    implementation 'com.github.bumptech.glide:glide:4.8.0'\r\n    implementation 'com.google.code.gson:gson:2.8.6'\r\n    implementation project(path: ':swipedrag')\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ app/build.gradle	(date 1609763317291)
+@@ -22,12 +22,12 @@
+     implementation fileTree(dir: 'libs', include: ['*.jar'])
+     implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
+     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
++    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+ 
+-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+-    implementation 'com.google.code.gson:gson:2.8.6'
++    implementation 'com.squareup.picasso:picasso:2.71828'
++    implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
+     implementation project(path: ':swipedrag')
+ }
+Index: app/src/main/res/layout/activity_user_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:background=\"#F8F8F8\">\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageview_profile\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"/>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/recyclerview_user_list\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"  />\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_user_list.xml	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ app/src/main/res/layout/activity_user_list.xml	(date 1574925397255)
+@@ -10,6 +10,12 @@
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"/>
+ 
++    <Button
++        android:layout_width="match_parent"
++        android:text="Open WebView"
++        android:onClick="onOpenClick"
++        android:layout_height="wrap_content"/>
++
+     <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/recyclerview_user_list"
+         android:layout_width="match_parent"
+Index: swipedrag/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.library'\r\n\r\napply plugin: 'com.github.dcendents.android-maven'\r\n\r\ngroup='com.github.appsfeature'\r\n\r\nandroid {\r\n    compileSdkVersion 28\r\n\r\n\r\n    defaultConfig {\r\n        minSdkVersion 15\r\n        targetSdkVersion 28\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n        consumerProguardFiles 'consumer-rules.pro'\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation \"androidx.appcompat:appcompat:$rootProject.ext.appcompat\"\r\n    implementation 'androidx.recyclerview:recyclerview:1.1.0'\r\n    implementation 'com.google.code.gson:gson:2.8.6'\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- swipedrag/build.gradle	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ swipedrag/build.gradle	(date 1609763257072)
+@@ -5,12 +5,12 @@
+ group='com.github.appsfeature'
+ 
+ android {
+-    compileSdkVersion 28
++    compileSdkVersion 29
+ 
+ 
+     defaultConfig {
+         minSdkVersion 15
+-        targetSdkVersion 28
++        targetSdkVersion 29
+         versionCode 1
+         versionName "1.0"
+ 
+@@ -29,7 +29,6 @@
+ 
+ dependencies {
+     implementation fileTree(dir: 'libs', include: ['*.jar'])
+-    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
+     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+-    implementation 'com.google.code.gson:gson:2.8.6'
++    implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
+ }
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.droidhelios.swipedraghelper\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity android:name=\".SecondExampleActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <action android:name=\"android.intent.action.VIEW\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <!--        <activity android:name=\".FirstExampleActivity\" />-->\r\n        <!--        <activity android:name=\".SecondExampleActivity\" />-->\r\n    </application>\r\n</manifest>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ app/src/main/AndroidManifest.xml	(date 1574925451825)
+@@ -20,6 +20,7 @@
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
++        <activity android:name=".WebViewActivity" />
+         <!--        <activity android:name=".FirstExampleActivity" />-->
+         <!--        <activity android:name=".SecondExampleActivity" />-->
+     </application>
+Index: app/src/main/java/com/droidhelios/swipedraghelper/SecondExampleActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.droidhelios.swipedraghelper;\r\n\r\nimport android.content.Context;\r\nimport android.content.res.Resources;\r\nimport android.graphics.drawable.Drawable;\r\nimport android.os.Bundle;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.droidhelios.swipedraghelper.model.AdvanceListAdapter;\r\nimport com.droidhelios.swipedraghelper.model.User;\r\nimport com.droidhelios.swipedraghelper.model.UsersData;\r\nimport com.droidhelios.swipedrag.SwipeDragHelper;\r\nimport com.google.gson.reflect.TypeToken;\r\n\r\nimport java.util.List;\r\n\r\npublic class SecondExampleActivity extends AppCompatActivity {\r\n\r\n    private List<User> usersList;\r\n    private AdvanceListAdapter adapter;\r\n    private SwipeDragHelper swipeAndDragHelper;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_user_list);\r\n\r\n        ImageView imageView = findViewById(R.id.imageview_profile);\r\n        RecyclerView userRecyclerView = findViewById(R.id.recyclerview_user_list);\r\n        userRecyclerView.setLayoutManager(new LinearLayoutManager(this));\r\n        adapter = new AdvanceListAdapter(this);\r\n        swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)\r\n                .setEnableResetSavedList(BuildConfig.VERSION_NAME)\r\n                .setEnableSwipeOption(true);\r\n        adapter.setSwipeDragHelper(swipeAndDragHelper);\r\n        userRecyclerView.setAdapter(adapter);\r\n\r\n        usersList = getHomePageList();\r\n        adapter.setUserList(usersList);\r\n\r\n//        imageView.setImageDrawable(findDrawableByName(this, \"ic_action_reorder\"));\r\n    }\r\n\r\n    private Drawable findDrawableByName(Context context, String drawableName) {\r\n        Resources resources = context.getResources();\r\n        final int resourceId = resources.getIdentifier(drawableName, \"drawable\",\r\n                context.getPackageName());\r\n        return resources.getDrawable(resourceId);\r\n    }\r\n\r\n\r\n    public List<User> getHomePageList() {\r\n        List<User> homeList = swipeAndDragHelper.getListUtil().getSavedList(new TypeToken<List<User>>() {\r\n        });\r\n        if (homeList == null) {\r\n            UsersData usersData = new UsersData();\r\n            homeList = usersData.getUsersList();\r\n            swipeAndDragHelper.getListUtil().saveHomePageList(this, homeList, new TypeToken<List<User>>() {\r\n            });\r\n        }\r\n        return homeList;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/droidhelios/swipedraghelper/SecondExampleActivity.java	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ app/src/main/java/com/droidhelios/swipedraghelper/SecondExampleActivity.java	(date 1574925498468)
+@@ -1,9 +1,11 @@
+ package com.droidhelios.swipedraghelper;
+ 
+ import android.content.Context;
++import android.content.Intent;
+ import android.content.res.Resources;
+ import android.graphics.drawable.Drawable;
+ import android.os.Bundle;
++import android.view.View;
+ import android.widget.ImageView;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+@@ -66,4 +68,7 @@
+     }
+ 
+ 
++    public void onOpenClick(View view) {
++        startActivity(new Intent(this, WebViewActivity.class));
++    }
+ }
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Thu Nov 21 13:50:49 IST 2019\r\ndistributionBase=GRADLE_USER_HOME\r\ndistributionPath=wrapper/dists\r\nzipStoreBase=GRADLE_USER_HOME\r\nzipStorePath=wrapper/dists\r\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-5.4.1-all.zip\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ gradle/wrapper/gradle-wrapper.properties	(date 1609763116098)
+@@ -1,6 +1,6 @@
+-#Thu Nov 21 13:50:49 IST 2019
++#Mon Jan 04 17:55:16 IST 2021
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-5.4.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-bin.zip
+Index: app/src/main/res/layout/activity_webview.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_webview.xml	(date 1574925498460)
++++ app/src/main/res/layout/activity_webview.xml	(date 1574925498460)
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <WebView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"/>
++
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/droidhelios/swipedraghelper/model/AdvanceListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.droidhelios.swipedraghelper.model;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.content.Context;\r\nimport android.text.TextUtils;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MotionEvent;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.droidhelios.swipedraghelper.R;\r\nimport com.droidhelios.swipedrag.SwipeDragHelper;\r\nimport com.droidhelios.swipedrag.interfaces.SwipeDragActionListener;\r\nimport com.google.gson.reflect.TypeToken;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * @author Created by Abhijit Rao on 20-11-2019.\r\n */\r\n\r\npublic class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements\r\n        SwipeDragActionListener {\r\n    private static final int USER_TYPE = 1;\r\n    private static final int HEADER_TYPE = 2;\r\n    private final Context context;\r\n    private List<User> usersList;\r\n\r\n    public AdvanceListAdapter(Context context) {\r\n        this.context= context;\r\n    }\r\n\r\n    @Override\r\n    @NonNull\r\n    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view;\r\n        switch (viewType) {\r\n            case USER_TYPE:\r\n                view = LayoutInflater.from(parent.getContext())\r\n                        .inflate(R.layout.layout_user_list_item_two, parent, false);\r\n                return new SecondViewHolder(view);\r\n            case HEADER_TYPE:\r\n                view = LayoutInflater.from(parent.getContext())\r\n                        .inflate(R.layout.layout_user_list_section_header, parent, false);\r\n                return new SectionHeaderViewHolder(view);\r\n            default:\r\n                view = LayoutInflater.from(parent.getContext())\r\n                        .inflate(R.layout.layout_user_list_item_two, parent, false);\r\n                return new SecondViewHolder(view);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    @SuppressLint(\"ClickableViewAccessibility\")\r\n    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {\r\n        int itemViewType = getItemViewType(position);\r\n        if (itemViewType == USER_TYPE) {\r\n            SecondViewHolder viewHolder = (SecondViewHolder) holder;\r\n            viewHolder.username.setText(usersList.get(position).getName());\r\n            Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);\r\n\r\n            if(isActiveChangePosition && changeItemViewHolder!=null){\r\n                startDragAnimation(changeItemViewHolder.itemView);\r\n            }\r\n        } else {\r\n            SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;\r\n            headerViewHolder.sectionTitle.setText(usersList.get(position).getType());\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return usersList == null ? 0 : usersList.size();\r\n    }\r\n\r\n    @Override\r\n    public int getItemViewType(int position) {\r\n        if (TextUtils.isEmpty(usersList.get(position).getName())) {\r\n            return HEADER_TYPE;\r\n        } else {\r\n            return USER_TYPE;\r\n        }\r\n    }\r\n\r\n    public void setUserList(List<User> usersList) {\r\n        this.usersList = usersList;\r\n        notifyDataSetChanged();\r\n    }\r\n\r\n    public boolean isActiveChangePosition = false;\r\n    private SecondViewHolder changeItemViewHolder;\r\n\r\n\r\n    private void startDragAnimation(View view) {\r\n        swipeDragHelper.makeMeShake(view, 80, 5);\r\n    }\r\n\r\n    public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener{\r\n\r\n        ImageView userAvatar;\r\n        TextView username, tvChangePosition;\r\n\r\n        SecondViewHolder(View itemView) {\r\n            super(itemView);\r\n            userAvatar = itemView.findViewById(R.id.imageview_profile);\r\n            username = itemView.findViewById(R.id.textview_name);\r\n            tvChangePosition = itemView.findViewById(R.id.tv_change_position);\r\n            tvChangePosition.setOnClickListener(this);\r\n            itemView.setOnClickListener(this);\r\n        }\r\n\r\n        @Override\r\n        public void onClick(View view) {\r\n            if(view.getId() == R.id.tv_change_position) {\r\n                isActiveChangePosition = !isActiveChangePosition;\r\n                changeItemViewHolder = SecondViewHolder.this;\r\n                setDragTouchListener(SecondViewHolder.this);\r\n            }else {\r\n                User item = usersList.get(getAdapterPosition());\r\n                Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();\r\n            }\r\n        }\r\n\r\n        @Override\r\n        @SuppressLint(\"ClickableViewAccessibility\")\r\n        public boolean onTouch(View v, MotionEvent event) {\r\n            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {\r\n                swipeDragHelper.getTouchHelper().startDrag(SecondViewHolder.this);\r\n            }\r\n            return false;\r\n        }\r\n\r\n        @SuppressLint(\"ClickableViewAccessibility\")\r\n        public void setDragTouchListener(SecondViewHolder viewHolder) {\r\n            viewHolder.tvChangePosition.setText(isActiveChangePosition ? \"Stop\" : \"Change Position\");\r\n            if (isActiveChangePosition) {\r\n                viewHolder.itemView.setOnTouchListener(this);\r\n                startDragAnimation(viewHolder.itemView);\r\n            } else {\r\n                viewHolder.itemView.setOnTouchListener(null);\r\n                viewHolder.itemView.clearAnimation();\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    @Override\r\n    public void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {\r\n        User targetUser = usersList.get(oldPosition);\r\n        User user = new User(targetUser);\r\n        usersList.remove(oldPosition);\r\n        usersList.add(newPosition, user);\r\n        notifyItemMoved(oldPosition, newPosition);\r\n\r\n        swipeDragHelper.getListUtil().saveHomePageList(context, usersList, new TypeToken<List<User>>() {\r\n        });\r\n        viewHolder.itemView.clearAnimation();\r\n        if (viewHolder instanceof SecondViewHolder) {\r\n            SecondViewHolder holder = (SecondViewHolder) viewHolder;\r\n            isActiveChangePosition = false;\r\n            holder.setDragTouchListener(holder);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void onViewSwiped(int position) {\r\n        usersList.remove(position);\r\n        notifyItemRemoved(position);\r\n    }\r\n\r\n    private SwipeDragHelper swipeDragHelper;\r\n\r\n    public void setSwipeDragHelper(SwipeDragHelper swipeDragHelper) {\r\n        this.swipeDragHelper = swipeDragHelper;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/droidhelios/swipedraghelper/model/AdvanceListAdapter.java	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ app/src/main/java/com/droidhelios/swipedraghelper/model/AdvanceListAdapter.java	(date 1609763531446)
+@@ -14,11 +14,11 @@
+ import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+-import com.bumptech.glide.Glide;
+-import com.droidhelios.swipedraghelper.R;
+ import com.droidhelios.swipedrag.SwipeDragHelper;
+ import com.droidhelios.swipedrag.interfaces.SwipeDragActionListener;
++import com.droidhelios.swipedraghelper.R;
+ import com.google.gson.reflect.TypeToken;
++import com.squareup.picasso.Picasso;
+ 
+ import java.util.List;
+ 
+@@ -64,7 +64,7 @@
+         if (itemViewType == USER_TYPE) {
+             SecondViewHolder viewHolder = (SecondViewHolder) holder;
+             viewHolder.username.setText(usersList.get(position).getName());
+-            Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);
++            Picasso.get().load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);
+ 
+             if(isActiveChangePosition && changeItemViewHolder!=null){
+                 startDragAnimation(changeItemViewHolder.itemView);
+Index: app/src/main/java/com/droidhelios/swipedraghelper/model/UserListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.droidhelios.swipedraghelper.model;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.text.TextUtils;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MotionEvent;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.droidhelios.swipedraghelper.R;\r\nimport com.droidhelios.swipedrag.util.CopySwipeDragHelper;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * @author Created by Abhijit Rao on 20-11-2019.\r\n */\r\n\r\npublic class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements\r\n        CopySwipeDragHelper.SwipeDragActionListener {\r\n    private static final int USER_TYPE = 1;\r\n    private static final int HEADER_TYPE = 2;\r\n    private List<User> usersList;\r\n\r\n    @Override\r\n    @NonNull\r\n    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view;\r\n        switch (viewType) {\r\n            case USER_TYPE:\r\n                view = LayoutInflater.from(parent.getContext())\r\n                        .inflate(R.layout.layout_user_list_item_one, parent, false);\r\n                return new UserViewHolder(view);\r\n            case HEADER_TYPE:\r\n                view = LayoutInflater.from(parent.getContext())\r\n                        .inflate(R.layout.layout_user_list_section_header, parent, false);\r\n                return new SectionHeaderViewHolder(view);\r\n            default:\r\n                view = LayoutInflater.from(parent.getContext())\r\n                        .inflate(R.layout.layout_user_list_item_one, parent, false);\r\n                return new UserViewHolder(view);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    @SuppressLint(\"ClickableViewAccessibility\")\r\n    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {\r\n        int itemViewType = getItemViewType(position);\r\n        if (itemViewType == USER_TYPE) {\r\n            ((UserViewHolder) holder).username.setText(usersList.get(position).getName());\r\n            Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(((UserViewHolder) holder).userAvatar);\r\n            ((UserViewHolder) holder).reorderView.setOnTouchListener(new View.OnTouchListener() {\r\n                @Override\r\n                public boolean onTouch(View v, MotionEvent event) {\r\n                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {\r\n                        swipeAndDragHelper.getTouchHelper().startDrag(holder);\r\n                    }\r\n                    return false;\r\n                }\r\n            });\r\n        } else {\r\n            SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;\r\n            headerViewHolder.sectionTitle.setText(usersList.get(position).getType());\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return usersList == null ? 0 : usersList.size();\r\n    }\r\n\r\n    @Override\r\n    public int getItemViewType(int position) {\r\n        if (TextUtils.isEmpty(usersList.get(position).getName())) {\r\n            return HEADER_TYPE;\r\n        } else {\r\n            return USER_TYPE;\r\n        }\r\n    }\r\n\r\n    public void setUserList(List<User> usersList) {\r\n        this.usersList = usersList;\r\n        notifyDataSetChanged();\r\n    }\r\n\r\n    @Override\r\n    public void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {\r\n        User targetUser = usersList.get(oldPosition);\r\n        User user = new User(targetUser);\r\n        usersList.remove(oldPosition);\r\n        usersList.add(newPosition, user);\r\n        notifyItemMoved(oldPosition, newPosition);\r\n    }\r\n\r\n    @Override\r\n    public void onViewSwiped(int position) {\r\n        usersList.remove(position);\r\n        notifyItemRemoved(position);\r\n    }\r\n\r\n    private CopySwipeDragHelper swipeAndDragHelper;\r\n\r\n    public void setSwipeAndDragHelper(CopySwipeDragHelper swipeAndDragHelper) {\r\n        this.swipeAndDragHelper = swipeAndDragHelper;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/droidhelios/swipedraghelper/model/UserListAdapter.java	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ app/src/main/java/com/droidhelios/swipedraghelper/model/UserListAdapter.java	(date 1609763508804)
+@@ -10,9 +10,9 @@
+ import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+-import com.bumptech.glide.Glide;
+ import com.droidhelios.swipedraghelper.R;
+ import com.droidhelios.swipedrag.util.CopySwipeDragHelper;
++import com.squareup.picasso.Picasso;
+ 
+ import java.util.List;
+ 
+@@ -52,7 +52,7 @@
+         int itemViewType = getItemViewType(position);
+         if (itemViewType == USER_TYPE) {
+             ((UserViewHolder) holder).username.setText(usersList.get(position).getName());
+-            Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(((UserViewHolder) holder).userAvatar);
++            Picasso.get().load(usersList.get(position).getImageUrl()).into(((UserViewHolder) holder).userAvatar);
+             ((UserViewHolder) holder).reorderView.setOnTouchListener(new View.OnTouchListener() {
+                 @Override
+                 public boolean onTouch(View v, MotionEvent event) {
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(date 1609763089115)
++++ .idea/jarRepositories.xml	(date 1609763089115)
+@@ -0,0 +1,25 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="BintrayJCenter" />
++      <option name="name" value="BintrayJCenter" />
++      <option name="url" value="https://jcenter.bintray.com/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="Google" />
++      <option name="name" value="Google" />
++      <option name="url" value="https://dl.google.com/dl/android/maven2/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># SwipeDragHelper \r\n\r\nAn Android Library that provide drag & drop and swipe-to-dismiss with list state maintain functionality for RecyclerView items \r\n\r\n<p align=\"center\">\r\n  <img src=\"https://raw.githubusercontent.com/appsfeature/swipe-drag-helper/master/screenshots/preview_sample.gif\" alt=\"Preview 1\" width=\"300\" />  \r\n</p>\r\n\r\n## Setup Project\r\n\r\nAdd this to your project build.gradle\r\n\r\nProject-level build.gradle (<project>/build.gradle):\r\n\r\n``` gradle \r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter() \r\n        maven { url 'https://jitpack.io' } \r\n    }\r\n}\r\n```\r\n\r\nAdd this to your project build.gradle\r\n\r\nModule-level build.gradle (<module>/build.gradle): \r\n\r\n#### [![](https://jitpack.io/v/appsfeature/swipe-drag-helper.svg)](https://jitpack.io/#appsfeature/swipe-drag-helper)\r\n```gradle  \r\n\r\ndependencies {\r\n    implementation 'com.github.appsfeature:swipe-drag-helper:x.y'\r\n} \r\n```\r\n\r\nIn your activity class:\r\n#### Usage method\r\n```java \r\npublic class ExampleActivity extends AppCompatActivity {\r\n\r\n    private List<User> usersList;\r\n    private AdvanceListAdapter adapter;\r\n    private SwipeDragHelper swipeAndDragHelper;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_user_list);\r\n\r\n        RecyclerView userRecyclerView = findViewById(R.id.recyclerview_user_list);\r\n        userRecyclerView.setLayoutManager(new LinearLayoutManager(this));\r\n        adapter = new AdvanceListAdapter(this);\r\n        swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)\r\n                .setEnableResetSavedList(BuildConfig.VERSION_NAME)\r\n                .setEnableSwipeOption(true);\r\n        adapter.setSwipeDragHelper(swipeAndDragHelper);\r\n        userRecyclerView.setAdapter(adapter);\r\n\r\n        usersList = getHomePageList();\r\n        adapter.setUserList(usersList);\r\n    }\r\n\r\n\r\n    public List<User> getHomePageList() {\r\n        List<User> homeList = swipeAndDragHelper.getListUtil().getSavedList(new TypeToken<List<User>>() {\r\n        });\r\n        if (homeList == null) {\r\n            UsersData usersData = new UsersData();\r\n            homeList = usersData.getUsersList();\r\n            swipeAndDragHelper.getListUtil().saveHomePageList(this, homeList, new TypeToken<List<User>>() {\r\n            });\r\n        }\r\n        return homeList;\r\n    }\r\n\r\n\r\n} \r\n                                \r\n```\r\n\r\nIn your Adapter class:\r\n#### Usage method\r\n```java \r\npublic class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements\r\n        CopySwipeDragHelper.SwipeDragActionListener { \r\n        \r\n        ...\r\n        ... \r\n\r\n    @Override\r\n    @SuppressLint(\"ClickableViewAccessibility\")\r\n    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {\r\n        ...\r\n        ...\r\n        ((UserViewHolder) holder).itemView.setOnTouchListener(new View.OnTouchListener() {\r\n                @Override\r\n                public boolean onTouch(View v, MotionEvent event) {\r\n                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {\r\n                        swipeAndDragHelper.getTouchHelper().startDrag(holder);\r\n                    }\r\n                    return false;\r\n                }\r\n            });\r\n    } \r\n\r\n    @Override\r\n    public void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {\r\n        User targetUser = usersList.get(oldPosition);\r\n        User user = new User(targetUser);\r\n        usersList.remove(oldPosition);\r\n        usersList.add(newPosition, user);\r\n        notifyItemMoved(oldPosition, newPosition);\r\n    }\r\n\r\n    @Override\r\n    public void onViewSwiped(int position) {\r\n        usersList.remove(position);\r\n        notifyItemRemoved(position);\r\n    }\r\n\r\n    private CopySwipeDragHelper swipeAndDragHelper;\r\n\r\n    public void setSwipeAndDragHelper(CopySwipeDragHelper swipeAndDragHelper) {\r\n        this.swipeAndDragHelper = swipeAndDragHelper;\r\n    }\r\n}\r\n                                \r\n```\r\n\r\n#### Useful Links:\r\n1. https://developer.android.com/reference/androidx/recyclerview/widget/ItemTouchHelper\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- README.md	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ README.md	(date 1609763192714)
+@@ -19,6 +19,10 @@
+         jcenter() 
+         maven { url 'https://jitpack.io' } 
+     }
++    ext {
++        appcompat = '1.1.0-alpha01'
++        retrofit_version = '2.3.0'
++    }
+ }
+ ```
+ 
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <compositeConfiguration>\r\n          <compositeBuild compositeDefinitionSource=\"SCRIPT\" />\r\n        </compositeConfiguration>\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n        <option name=\"testRunner\" value=\"PLATFORM\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ .idea/gradle.xml	(date 1609763168319)
+@@ -1,15 +1,23 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <compositeConfiguration>
+-          <compositeBuild compositeDefinitionSource="SCRIPT" />
+-        </compositeConfiguration>
++        <option name="delegatedBuild" value="false" />
++        <option name="testRunner" value="PLATFORM" />
++        <option name="disableWrapperSourceDistributionNotification" value="true" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++            <option value="$PROJECT_DIR$/app" />
++            <option value="$PROJECT_DIR$/swipedrag" />
++          </set>
++        </option>
+         <option name="resolveModulePerSourceSet" value="false" />
+-        <option name="testRunner" value="PLATFORM" />
++        <option name="useQualifiedModuleNames" value="true" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\n\r\nbuildscript {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n\r\n\r\n        maven { url \"https://jitpack.io\" }\r\n    }\r\n    dependencies {\r\n        classpath 'com.android.tools.build:gradle:3.5.1'\r\n        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n        \r\n    }\r\n\r\n    ext {\r\n        appcompat = '1.1.0-alpha01'\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ build.gradle	(date 1609763178208)
+@@ -4,12 +4,10 @@
+     repositories {
+         google()
+         jcenter()
+-
+-
+         maven { url "https://jitpack.io" }
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:3.5.1'
++        classpath 'com.android.tools.build:gradle:4.1.1'
+         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+@@ -20,11 +18,10 @@
+     repositories {
+         google()
+         jcenter()
+-        
+     }
+-
+     ext {
+         appcompat = '1.1.0-alpha01'
++        retrofit_version = '2.3.0'
+     }
+ }
+ 
+Index: app/src/main/java/com/droidhelios/swipedraghelper/WebViewActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/droidhelios/swipedraghelper/WebViewActivity.java	(date 1574925451840)
++++ app/src/main/java/com/droidhelios/swipedraghelper/WebViewActivity.java	(date 1574925451840)
+@@ -0,0 +1,35 @@
++package com.droidhelios.swipedraghelper;
++
++import android.content.Context;
++import android.content.res.Resources;
++import android.graphics.drawable.Drawable;
++import android.os.Bundle;
++import android.view.View;
++import android.widget.ImageView;
++
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.droidhelios.swipedrag.SwipeDragHelper;
++import com.droidhelios.swipedraghelper.model.AdvanceListAdapter;
++import com.droidhelios.swipedraghelper.model.User;
++import com.droidhelios.swipedraghelper.model.UsersData;
++import com.google.gson.reflect.TypeToken;
++
++import java.util.List;
++
++public class WebViewActivity extends AppCompatActivity {
++
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_webview
++        );
++
++
++    }
++
++
++}
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_7\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 8e7444449488883d83fe95d56a6d574834f9e9b9)
++++ .idea/misc.xml	(date 1609763084277)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(date 1609763084290)
++++ .idea/compiler.xml	(date 1609763084290)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="1.8" />
++  </component>
++</project>
+\ No newline at end of file

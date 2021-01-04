@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.droidhelios.swipedraghelper.R;
 import com.droidhelios.swipedrag.util.CopySwipeDragHelper;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         int itemViewType = getItemViewType(position);
         if (itemViewType == USER_TYPE) {
             ((UserViewHolder) holder).username.setText(usersList.get(position).getName());
-            Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(((UserViewHolder) holder).userAvatar);
+            Picasso.get().load(usersList.get(position).getImageUrl()).into(((UserViewHolder) holder).userAvatar);
             ((UserViewHolder) holder).reorderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

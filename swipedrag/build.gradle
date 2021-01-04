@@ -5,12 +5,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.appsfeature'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -29,7 +29,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
 }

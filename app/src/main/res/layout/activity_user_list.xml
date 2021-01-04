@@ -10,6 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:text="Open WebView"
+        android:onClick="onOpenClick"
+        android:layout_height="wrap_content"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_user_list"
         android:layout_width="match_parent"

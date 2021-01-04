@@ -14,11 +14,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.droidhelios.swipedraghelper.R;
 import com.droidhelios.swipedrag.SwipeDragHelper;
 import com.droidhelios.swipedrag.interfaces.SwipeDragActionListener;
+import com.droidhelios.swipedraghelper.R;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (itemViewType == USER_TYPE) {
             SecondViewHolder viewHolder = (SecondViewHolder) holder;
             viewHolder.username.setText(usersList.get(position).getName());
-            Glide.with(holder.itemView).load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);
+            Picasso.get().load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);
             viewHolder.setDragTouchListener(viewHolder, usersList.get(position));
         } else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;

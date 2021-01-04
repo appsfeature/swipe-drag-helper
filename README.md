@@ -19,6 +19,10 @@ allprojects {
         jcenter() 
         maven { url 'https://jitpack.io' } 
     }
+    ext {
+        appcompat = '1.1.0-alpha01'
+        retrofit_version = '2.3.0'
+    }
 }
 ```
 
