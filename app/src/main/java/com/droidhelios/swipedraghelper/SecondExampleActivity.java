@@ -37,6 +37,7 @@ public class SecondExampleActivity extends AppCompatActivity {
         adapter = new AdvanceListAdapter(this);
         swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)
                 .setEnableResetSavedList(BuildConfig.VERSION_NAME)
+                .setDisableDragPositionAt(0)
                 .setEnableSwipeOption(true);
         adapter.setSwipeDragHelper(swipeAndDragHelper);
         userRecyclerView.setAdapter(adapter);

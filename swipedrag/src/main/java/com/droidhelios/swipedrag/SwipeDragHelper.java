@@ -24,6 +24,8 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     private final SDAnimation sdAnimation;
     private SwipeDragActionListener contract;
     private boolean isEnableSwipeOption = false;
+    private int disableDragPositionAt = -1;
+    private boolean isLongPressDragEnabled = false;
     private String versionName = SDConstants.EMPTY;
 
     private SwipeDragHelper(RecyclerView recyclerView, SwipeDragActionListener contract) {
@@ -69,6 +71,17 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     }
 
     @Override
+    public boolean canDropOver(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder current, @NonNull RecyclerView.ViewHolder target) {
+        if (disableDragPositionAt >= 0) {
+            int position = recyclerView.getChildAdapterPosition(target.itemView);
+            if (position == disableDragPositionAt) {
+                return false;
+            }
+        }
+        return super.canDropOver(recyclerView, current, target);
+    }
+
+    @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         contract.onViewMoved(viewHolder, viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
@@ -81,7 +94,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return false;
+        return isLongPressDragEnabled;
     }
 
     @Override
@@ -117,6 +130,14 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
         return this;
     }
 
+    public SwipeDragHelper setDisableDragPositionAt(int disableDragPositionAt) {
+        this.disableDragPositionAt = disableDragPositionAt;
+        return this;
+    }
 
+    public SwipeDragHelper setLongPressDragEnabled(boolean longPressDragEnabled) {
+        isLongPressDragEnabled = longPressDragEnabled;
+        return this;
+    }
 
 }
