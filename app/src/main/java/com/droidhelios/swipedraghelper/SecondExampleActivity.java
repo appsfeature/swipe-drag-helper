@@ -57,12 +57,12 @@ public class SecondExampleActivity extends AppCompatActivity {
 
 
     public List<User> getHomePageList() {
-        List<User> homeList = swipeAndDragHelper.getListUtil().getSavedList(new TypeToken<List<User>>() {
+        List<User> homeList = swipeAndDragHelper.getListUtil().getRankList(new TypeToken<List<User>>() {
         });
         if (homeList == null) {
             UsersData usersData = new UsersData();
             homeList = usersData.getUsersList();
-            swipeAndDragHelper.getListUtil().saveHomePageList(this, homeList, new TypeToken<List<User>>() {
+            swipeAndDragHelper.getListUtil().saveRankList(this, homeList, new TypeToken<List<User>>() {
             });
         }
         return homeList;

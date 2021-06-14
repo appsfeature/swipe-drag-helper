@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidhelios.swipedrag.animation.SDAnimation;
 import com.droidhelios.swipedrag.dragger.SwipeDragStatePreference;
-import com.droidhelios.swipedrag.interfaces.SwipeDragActionListener;
 import com.droidhelios.swipedrag.util.SDConstants;
 
 /**
@@ -22,13 +21,13 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     private final RecyclerView recyclerView;
     private final SwipeDragStatePreference dragDropStateUtil;
     private final SDAnimation sdAnimation;
-    private SwipeDragActionListener contract;
+    private ActionListener contract;
     private boolean isEnableSwipeOption = false;
     private int disableDragPositionAt = -1;
     private boolean isLongPressDragEnabled = false;
     private String versionName = SDConstants.EMPTY;
 
-    private SwipeDragHelper(RecyclerView recyclerView, SwipeDragActionListener contract) {
+    private SwipeDragHelper(RecyclerView recyclerView, ActionListener contract) {
         this.contract = contract;
         this.recyclerView = recyclerView;
         this.touchHelper = new ItemTouchHelper(this);
@@ -41,7 +40,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
      * @param recyclerView = recyclerView reference
      * @param adapter      = adapter reference
      */
-    public static SwipeDragHelper Builder(RecyclerView recyclerView, SwipeDragActionListener adapter) {
+    public static SwipeDragHelper Builder(RecyclerView recyclerView, ActionListener adapter) {
         return new SwipeDragHelper(recyclerView, adapter);
     }
 
@@ -49,6 +48,17 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
+    public interface ActionListener {
+        /**
+         * User targetUser = usersList.get(oldPosition);
+         * usersList.remove(oldPosition);
+         * usersList.add(newPosition, targetUser);
+         * notifyItemMoved(oldPosition, newPosition);
+         */
+        void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition);
+
+        void onViewSwiped(int position);
+    }
 
     public ItemTouchHelper getTouchHelper() {
         return touchHelper;

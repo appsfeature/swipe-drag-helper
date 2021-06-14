@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidhelios.swipedrag.SwipeDragHelper;
-import com.droidhelios.swipedrag.interfaces.SwipeDragActionListener;
 import com.droidhelios.swipedraghelper.R;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -27,7 +26,7 @@ import java.util.List;
  */
 
 public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
-        SwipeDragActionListener {
+        SwipeDragHelper.ActionListener {
     private static final int USER_TYPE = 1;
     private static final int HEADER_TYPE = 2;
     private final Context context;
@@ -162,7 +161,7 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         usersList.add(newPosition, item);
         notifyItemMoved(oldPosition, newPosition);
 
-        swipeDragHelper.getListUtil().saveHomePageList(context, usersList, new TypeToken<List<User>>() {
+        swipeDragHelper.getListUtil().saveRankList(context, usersList, new TypeToken<List<User>>() {
         });
         if (viewHolder instanceof SecondViewHolder) {
             SecondViewHolder holder = (SecondViewHolder) viewHolder;

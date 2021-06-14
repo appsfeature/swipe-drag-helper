@@ -23,10 +23,10 @@ public class SwipeDragStatePreference {
         this.versionName = versionName;
     }
 
-    public <T> List<T> getSavedList(TypeToken<List<T>> typeCast) {
-        if(getLastVersion(context).equalsIgnoreCase(versionName)) {
+    public <T> List<T> getRankList(TypeToken<List<T>> typeCast) {
+        if (getLastVersion(context).equalsIgnoreCase(versionName)) {
             return parseJson(getData(context, HOME_PAGE_LIST), typeCast);
-        }else {
+        } else {
             return null;
         }
     }
@@ -36,7 +36,7 @@ public class SwipeDragStatePreference {
     }
 
 
-    public <T> void saveHomePageList(final Context context, final List<T> jsonArray, TypeToken<List<T>> typeCast) {
+    public <T> void saveRankList(final Context context, final List<T> jsonArray, TypeToken<List<T>> typeCast) {
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .serializeNulls()
@@ -44,6 +44,14 @@ public class SwipeDragStatePreference {
         String finalList = gson.toJson(jsonArray, typeCast.getType());
         setData(context, HOME_PAGE_LIST, finalList);
         setData(context, LIST_RESET_FLAG, versionName);
+    }
+
+    public String getSavedListJsonData(Context context) {
+        return getData(context, HOME_PAGE_LIST);
+    }
+
+    public void setSavedListJsonData(Context context, String value) {
+        setData(context, HOME_PAGE_LIST, value);
     }
 
     private <T> List<T> parseJson(String jsonContent, TypeToken<List<T>> typeCast) {
