@@ -76,7 +76,7 @@ public class SwipeDragStatePreference {
         if (context != null && value != null) {
             final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
             editor.putString(key, value);
-            editor.apply();
+            editor.commit();
         }
     }
 

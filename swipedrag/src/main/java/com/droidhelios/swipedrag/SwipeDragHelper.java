@@ -11,6 +11,8 @@ import com.droidhelios.swipedrag.animation.SDAnimation;
 import com.droidhelios.swipedrag.dragger.SwipeDragStatePreference;
 import com.droidhelios.swipedrag.util.SDConstants;
 
+import java.util.List;
+
 /**
  * @author Created by Abhijit on 20-11-2019.
  */
@@ -24,6 +26,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     private ActionListener contract;
     private boolean isEnableSwipeOption = false;
     private int disableDragPositionAt = -1;
+    private List<Integer> disableDragPositionList;
     private boolean isLongPressDragEnabled = false;
     private String versionName = SDConstants.EMPTY;
 
@@ -88,6 +91,12 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
                 return false;
             }
         }
+        if (disableDragPositionList != null) {
+            int position = recyclerView.getChildAdapterPosition(target.itemView);
+            if(disableDragPositionList.contains(position)){
+                return false;
+            }
+        }
         return super.canDropOver(recyclerView, current, target);
     }
 
@@ -142,6 +151,11 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
 
     public SwipeDragHelper setDisableDragPositionAt(int disableDragPositionAt) {
         this.disableDragPositionAt = disableDragPositionAt;
+        return this;
+    }
+
+    public SwipeDragHelper setDisableDragPositionList(List<Integer> disableDragPositionList) {
+        this.disableDragPositionList = disableDragPositionList;
         return this;
     }
 
