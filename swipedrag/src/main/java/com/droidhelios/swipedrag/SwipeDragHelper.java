@@ -25,6 +25,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     private final SDAnimation sdAnimation;
     private ActionListener contract;
     private boolean isEnableSwipeOption = false;
+    private boolean isEnableGridView = false;
     private int disableDragPositionAt = -1;
     private List<Integer> disableDragPositionList;
     private boolean isLongPressDragEnabled = false;
@@ -73,7 +74,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         int swipeFlags;
         if (isEnableSwipeOption) {
             swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
@@ -141,6 +142,11 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
 
     public SwipeDragHelper setEnableSwipeOption(boolean isEnableSwipeOption) {
         this.isEnableSwipeOption = isEnableSwipeOption;
+        return this;
+    }
+
+    public SwipeDragHelper setEnableGridView(boolean enableGridView) {
+        isEnableGridView = enableGridView;
         return this;
     }
 
