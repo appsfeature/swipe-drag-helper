@@ -19,6 +19,7 @@ import com.droidhelios.swipedraghelper.model.UsersData;
 import com.droidhelios.swipedrag.SwipeDragHelper;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -26,9 +27,7 @@ import java.util.List;
 
 public class SecondExampleActivity extends AppCompatActivity {
 
-    private List<User> usersList;
-    private AdvanceListAdapter adapter;
-    private SwipeDragHelper swipeAndDragHelper;
+    private List<User> usersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +37,16 @@ public class SecondExampleActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.imageview_profile);
         RecyclerView userRecyclerView = findViewById(R.id.recyclerview_user_list);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AdvanceListAdapter(this);
-        swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)
+        AdvanceListAdapter adapter = new AdvanceListAdapter(this, usersList);
+        SwipeDragHelper swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)
                 .setDisableDragPositionAt(0)
                 .setEnableSwipeOption(false)
                 .setEnableGridView(false);
         adapter.setSwipeDragHelper(swipeAndDragHelper);
         userRecyclerView.setAdapter(adapter);
 
-        usersList = getHomePageList();
-        adapter.setUserList(usersList);
+        usersList.addAll(getHomePageList());
+        adapter.notifyDataSetChanged();
 
 //        imageView.setImageDrawable(findDrawableByName(this, "ic_action_reorder"));
     }
@@ -64,9 +63,9 @@ public class SecondExampleActivity extends AppCompatActivity {
         HashMap<Integer, Integer> rankList = getRankList(this);
         List<User> homeList = new UsersData().getUsersList();
         if (homeList != null) {
-            for(User item : homeList){
+            for (User item : homeList) {
                 Integer rank = rankList.get(item.getId());
-                if(rank != null){
+                if (rank != null) {
                     item.setRanking(rank);
                 }
             }
@@ -90,8 +89,8 @@ public class SecondExampleActivity extends AppCompatActivity {
         HashMap<Integer, Integer> map = new HashMap<>();
         List<User> rankList = SwipeDragHelper.getRankList(context, new TypeToken<List<User>>() {
         });
-        if(rankList != null){
-            for (User item : rankList){
+        if (rankList != null) {
+            for (User item : rankList) {
                 map.put(item.getId(), item.getRanking());
             }
         }

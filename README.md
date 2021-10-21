@@ -43,9 +43,7 @@ In your activity class:
 ```java 
 public class ExampleActivity extends AppCompatActivity {
 
-    private List<User> usersList;
-    private AdvanceListAdapter adapter;
-    private SwipeDragHelper swipeAndDragHelper;
+    private List<User> usersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +52,16 @@ public class ExampleActivity extends AppCompatActivity {
 
         RecyclerView userRecyclerView = findViewById(R.id.recyclerview_user_list);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AdvanceListAdapter(this);
-        swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)
+        AdvanceListAdapter adapter = new AdvanceListAdapter(this, usersList);
+        SwipeDragHelper swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)
                 .setDisableDragPositionAt(0)
                 .setEnableSwipeOption(false)
                 .setEnableGridView(false);
         adapter.setSwipeDragHelper(swipeAndDragHelper);
         userRecyclerView.setAdapter(adapter);
 
-        usersList = getHomePageList();
-        adapter.setUserList(usersList);
+        usersList.addAll(getHomePageList());
+        adapter.notifyDataSetChanged();
     }
 
 

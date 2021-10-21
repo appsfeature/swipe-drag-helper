@@ -35,8 +35,9 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final Context context;
     private List<User> usersList;
 
-    public AdvanceListAdapter(Context context) {
+    public AdvanceListAdapter(Context context, List<User> usersList) {
         this.context= context;
+        this.usersList= usersList;
     }
 
     @Override
@@ -84,13 +85,6 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return USER_TYPE;
         }
     }
-
-    public void setUserList(List<User> usersList) {
-        this.usersList = usersList;
-        notifyDataSetChanged();
-    }
-
-
 
     private void startDragAnimation(View view) {
         swipeDragHelper.makeMeShake(view, 80, 5);
