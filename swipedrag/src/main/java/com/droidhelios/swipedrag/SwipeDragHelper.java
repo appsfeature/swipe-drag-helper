@@ -1,5 +1,6 @@
 package com.droidhelios.swipedrag;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidhelios.swipedrag.animation.SDAnimation;
 import com.droidhelios.swipedrag.dragger.SwipeDragStatePreference;
 import com.droidhelios.swipedrag.util.SDConstants;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -46,6 +48,12 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
      */
     public static SwipeDragHelper Builder(RecyclerView recyclerView, ActionListener adapter) {
         return new SwipeDragHelper(recyclerView, adapter);
+    }
+    /**
+     * @param typeCast : new TypeToken<List<ModelName>>() {}
+     */
+    public static <T> List<T> getRankList(Context context, TypeToken<List<T>> typeCast) {
+        return new SwipeDragStatePreference(context, SDConstants.EMPTY).getRankList(typeCast);
     }
 
     private void attachToRecyclerView() {

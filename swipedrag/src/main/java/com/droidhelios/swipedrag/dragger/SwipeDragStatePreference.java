@@ -23,6 +23,9 @@ public class SwipeDragStatePreference {
         this.versionName = versionName;
     }
 
+    /**
+     * @param typeCast : new TypeToken<List<ModelName>>() {}
+     */
     public <T> List<T> getRankList(TypeToken<List<T>> typeCast) {
         if (getLastVersion(context).equalsIgnoreCase(versionName)) {
             return parseJson(getData(context, HOME_PAGE_LIST), typeCast);
@@ -35,7 +38,9 @@ public class SwipeDragStatePreference {
         return getData(context, LIST_RESET_FLAG);
     }
 
-
+    /**
+     * @param typeCast : new TypeToken<List<ModelName>>() {}
+     */
     public <T> void saveRankList(final Context context, final List<T> jsonArray, TypeToken<List<T>> typeCast) {
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
