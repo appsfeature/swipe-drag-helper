@@ -13,29 +13,18 @@ import java.util.List;
 public class SwipeDragStatePreference {
 
     private static final String HOME_PAGE_LIST = "home_page_list";
-    private static final String LIST_RESET_FLAG = "list_reset_flag";
 
     private final Context context;
-    private final String versionName;
 
-    public SwipeDragStatePreference(Context context, String versionName) {
+    public SwipeDragStatePreference(Context context) {
         this.context = context;
-        this.versionName = versionName;
     }
 
     /**
      * @param typeCast : new TypeToken<List<ModelName>>() {}
      */
     public <T> List<T> getRankList(TypeToken<List<T>> typeCast) {
-        if (getLastVersion(context).equalsIgnoreCase(versionName)) {
-            return parseJson(getData(context, HOME_PAGE_LIST), typeCast);
-        } else {
-            return null;
-        }
-    }
-
-    private String getLastVersion(Context context) {
-        return getData(context, LIST_RESET_FLAG);
+        return parseJson(getData(context, HOME_PAGE_LIST), typeCast);
     }
 
     /**
@@ -48,7 +37,6 @@ public class SwipeDragStatePreference {
                 .create();
         String finalList = gson.toJson(jsonArray, typeCast.getType());
         setData(context, HOME_PAGE_LIST, finalList);
-        setData(context, LIST_RESET_FLAG, versionName);
     }
 
     public String getSavedListJsonData(Context context) {

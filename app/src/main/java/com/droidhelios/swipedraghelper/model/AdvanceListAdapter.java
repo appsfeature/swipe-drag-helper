@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidhelios.swipedrag.SwipeDragHelper;
@@ -20,6 +21,7 @@ import com.droidhelios.swipedraghelper.R;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,7 +64,7 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             SecondViewHolder viewHolder = (SecondViewHolder) holder;
             viewHolder.username.setText(usersList.get(position).getName());
             Picasso.get().load(usersList.get(position).getImageUrl()).into(viewHolder.userAvatar);
-            viewHolder.setDragTouchListener(viewHolder, usersList.get(position));
+            viewHolder.setDragTouchListener(viewHolder, usersList.get(position).isChangePosition());
         } else {
             SectionHeaderViewHolder headerViewHolder = (SectionHeaderViewHolder) holder;
             headerViewHolder.sectionTitle.setText(usersList.get(position).getType());
@@ -115,7 +117,7 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 usersList.get(position).setChangePosition(!usersList.get(position).isChangePosition());
                 //add this method for disable click when drag option is active
 //                subAdapter.setChangePosition(usersList.get(position).isChangePosition());
-                setDragTouchListener(SecondViewHolder.this, usersList.get(position));
+                setDragTouchListener(SecondViewHolder.this, usersList.get(position).isChangePosition());
                 if (usersList.get(position).isChangePosition()) {
                     Toast.makeText(context,"Drag and drop where you want.", Toast.LENGTH_SHORT).show();
                 }
@@ -135,9 +137,9 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        public void setDragTouchListener(SecondViewHolder viewHolder, User item) {
-            viewHolder.tvChangePosition.setText(item.isChangePosition() ? "Stop" : "Change Position");
-            if (item.isChangePosition()) {
+        public void setDragTouchListener(SecondViewHolder viewHolder, boolean isEnableTouch) {
+            viewHolder.tvChangePosition.setText(isEnableTouch ? "Stop" : "Change Position");
+            if (isEnableTouch) {
                 viewHolder.itemView.setOnTouchListener(this);
                 startDragAnimation(viewHolder.itemView);
             } else {
@@ -150,31 +152,25 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition) {
-        User newItem = usersList.get(oldPosition);
-        User oldItem = usersList.get(newPosition);
-        int oldPos = oldItem.getRanking();
-        oldItem.setRanking(newItem.getRanking());
-        newItem.setRanking(oldPos);
-        newItem.setChangePosition(false);
-
-        User item = newItem.getClone();
+        User item = usersList.get(oldPosition).getClone();
         usersList.remove(oldPosition);
         usersList.add(newPosition, item);
         notifyItemMoved(oldPosition, newPosition);
 
-        swipeDragHelper.getListUtil().saveRankList(context, usersList, new TypeToken<List<User>>() {
-        });
         if (viewHolder instanceof SecondViewHolder) {
-            SecondViewHolder holder = (SecondViewHolder) viewHolder;
-            holder.itemView.clearAnimation();
-//            holder.subAdapter.setChangePosition(false);
-            holder.setDragTouchListener(holder, newItem);
+            ((SecondViewHolder) viewHolder).setDragTouchListener(((SecondViewHolder) viewHolder), false);
         }
     }
 
     @Override
     public void onStateChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-
+        if(actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
+            for (int i=0; i < usersList.size(); i++){
+                usersList.get(i).setRanking(i + 1);
+                usersList.get(i).setChangePosition(false);
+            }
+            swipeDragHelper.getListUtil().saveRankList(context, usersList,new TypeToken<List<User>>() {});
+        }
     }
 
     @Override

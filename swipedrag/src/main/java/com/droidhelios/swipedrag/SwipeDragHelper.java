@@ -2,6 +2,7 @@ package com.droidhelios.swipedrag;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -32,14 +33,13 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     private int disableDragPositionAt = -1;
     private List<Integer> disableDragPositionList;
     private boolean isLongPressDragEnabled = false;
-    private String versionName = SDConstants.EMPTY;
 
     private SwipeDragHelper(RecyclerView recyclerView, ActionListener contract) {
         this.contract = contract;
         this.recyclerView = recyclerView;
         this.touchHelper = new ItemTouchHelper(this);
         this.sdAnimation = new SDAnimation();
-        this.dragDropStateUtil = new SwipeDragStatePreference(recyclerView.getContext(), versionName);
+        this.dragDropStateUtil = new SwipeDragStatePreference(recyclerView.getContext());
         attachToRecyclerView();
     }
 
@@ -54,7 +54,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
      * @param typeCast : new TypeToken<List<ModelName>>() {}
      */
     public static <T> List<T> getRankList(Context context, TypeToken<List<T>> typeCast) {
-        return new SwipeDragStatePreference(context, SDConstants.EMPTY).getRankList(typeCast);
+        return new SwipeDragStatePreference(context).getRankList(typeCast);
     }
 
     private void attachToRecyclerView() {
@@ -126,6 +126,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         contract.onViewMoved(viewHolder, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        Log.d("@Alpha", "onMove");
         return true;
     }
 
@@ -151,6 +152,8 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
+        Log.d("@Alpha", "onSelectedChanged");
+
         contract.onStateChanged(viewHolder, actionState);
     }
 
@@ -175,11 +178,6 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
 
     public SwipeDragHelper setEnableGridView(boolean enableGridView) {
         isEnableGridView = enableGridView;
-        return this;
-    }
-
-    public SwipeDragHelper setEnableResetSavedList(String versionName) {
-        this.versionName = versionName;
         return this;
     }
 

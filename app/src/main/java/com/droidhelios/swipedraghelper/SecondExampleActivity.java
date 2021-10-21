@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,9 @@ import com.droidhelios.swipedraghelper.model.UsersData;
 import com.droidhelios.swipedrag.SwipeDragHelper;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class SecondExampleActivity extends AppCompatActivity {
@@ -36,9 +40,9 @@ public class SecondExampleActivity extends AppCompatActivity {
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AdvanceListAdapter(this);
         swipeAndDragHelper = SwipeDragHelper.Builder(userRecyclerView, adapter)
-                .setEnableResetSavedList(BuildConfig.VERSION_NAME)
                 .setDisableDragPositionAt(0)
-                .setEnableSwipeOption(true);
+                .setEnableSwipeOption(false)
+                .setEnableGridView(false);
         adapter.setSwipeDragHelper(swipeAndDragHelper);
         userRecyclerView.setAdapter(adapter);
 
@@ -52,20 +56,46 @@ public class SecondExampleActivity extends AppCompatActivity {
         Resources resources = context.getResources();
         final int resourceId = resources.getIdentifier(drawableName, "drawable",
                 context.getPackageName());
-        return resources.getDrawable(resourceId);
+        return ContextCompat.getDrawable(context, resourceId);
     }
 
 
     public List<User> getHomePageList() {
-        List<User> homeList = swipeAndDragHelper.getListUtil().getRankList(new TypeToken<List<User>>() {
-        });
-        if (homeList == null) {
-            UsersData usersData = new UsersData();
-            homeList = usersData.getUsersList();
-            swipeAndDragHelper.getListUtil().saveRankList(this, homeList, new TypeToken<List<User>>() {
-            });
+        HashMap<Integer, Integer> rankList = getRankList(this);
+        List<User> homeList = new UsersData().getUsersList();
+        if (homeList != null) {
+            for(User item : homeList){
+                Integer rank = rankList.get(item.getId());
+                if(rank != null){
+                    item.setRanking(rank);
+                }
+            }
+            sortArrayList(homeList);
         }
         return homeList;
+    }
+
+    private void sortArrayList(List<User> list) {
+        Collections.sort(list, new Comparator<User>() {
+            @Override
+            public int compare(User item, User item2) {
+                Integer value = item.getRanking();
+                Integer value2 = item2.getRanking();
+                return value.compareTo(value2);
+            }
+        });
+    }
+
+    public HashMap<Integer, Integer> getRankList(Context context) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<User> rankList = SwipeDragHelper.getRankList(context, new TypeToken<List<User>>() {
+        });
+        if(rankList != null){
+            for (User item : rankList){
+                map.put(item.getId(), item.getRanking());
+            }
+        }
+        return map;
     }
 
 
