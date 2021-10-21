@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidhelios.swipedrag.SwipeDragHelper;
@@ -169,6 +170,11 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            holder.subAdapter.setChangePosition(false);
             holder.setDragTouchListener(holder, newItem);
         }
+    }
+
+    @Override
+    public void onStateChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+
     }
 
     @Override

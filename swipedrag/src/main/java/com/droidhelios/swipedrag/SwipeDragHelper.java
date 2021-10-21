@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
     private final RecyclerView recyclerView;
     private final SwipeDragStatePreference dragDropStateUtil;
     private final SDAnimation sdAnimation;
-    private ActionListener contract;
+    private final ActionListener contract;
     private boolean isEnableSwipeOption = false;
     private boolean isEnableGridView = false;
     private int disableDragPositionAt = -1;
@@ -69,7 +70,15 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
          */
         void onViewMoved(RecyclerView.ViewHolder viewHolder, int oldPosition, int newPosition);
 
-        void onViewSwiped(int position);
+        /**
+         * @param viewHolder – The new ViewHolder that is being swiped or dragged. Might be null if it is cleared.
+         * @param actionState – One of ItemTouchHelper.ACTION_STATE_IDLE, ACTION_STATE_DRAG or ACTION_STATE_SWIPE.
+         */
+        void onStateChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState);
+
+        default void onViewSwiped(int position) {
+
+        }
     }
 
     public ItemTouchHelper getTouchHelper() {
@@ -137,6 +146,12 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
             viewHolder.itemView.setAlpha(alpha);
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+    }
+
+    @Override
+    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+        super.onSelectedChanged(viewHolder, actionState);
+        contract.onStateChanged(viewHolder, actionState);
     }
 
     public void makeMeShake(View view, int speed, int yOffset) {
