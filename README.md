@@ -201,6 +201,8 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 usersList.get(i).setRanking(i + 1);
                 usersList.get(i).setChangePosition(false);
             }
+            //No need to notifyDataSetChanged
+            //Update list ranking and save in preferences
             swipeDragHelper.getListUtil().saveRankList(context, usersList,new TypeToken<List<User>>() {});
         }
     }
