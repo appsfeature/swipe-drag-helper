@@ -218,8 +218,8 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 ```
 
 ### Important Notes:
-
-```java 1. If Drag and Drop not moving properly i.e dropping slot automatically than check your adapter code
+1. If Drag and Drop not moving properly i.e dropping slot automatically than check your adapter code
+```java
     //Wrong code
     @Override
     public int getItemViewType(int position) {
