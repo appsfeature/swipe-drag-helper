@@ -128,7 +128,8 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ...
     } 
     
-    public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener{
+    public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+            , View.OnTouchListener{
 
         ...
         ...

@@ -90,7 +90,8 @@ public class AdvanceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         swipeDragHelper.makeMeShake(view, 80, 5);
     }
 
-    public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener{
+    public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+            , View.OnTouchListener{
 
         ImageView userAvatar;
         TextView username, tvChangePosition;
