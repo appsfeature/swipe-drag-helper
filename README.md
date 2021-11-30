@@ -128,6 +128,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         SecondViewHolder viewHolder = (SecondViewHolder) holder;
         ...
         ...
+        holder.setDragTouchListener(holder, item.isChangePosition());
     } 
     
     public class SecondViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -177,7 +178,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.tvChangePosition.setText(isEnableTouch ? "Stop" : "Change Position");
             if (isEnableTouch) {
                 viewHolder.itemView.setOnTouchListener(this);
-                startDragAnimation(viewHolder.itemView);
+                swipeDragHelper.makeMeShake(viewHolder.itemView, 80, 5);
             } else {
                 viewHolder.itemView.setOnTouchListener(null);
                 viewHolder.itemView.clearAnimation();
