@@ -64,44 +64,46 @@ public class ExampleActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    public List<User> getHomePageList() {
+        HashMap<Integer, Integer> rankList = getRankList(this);
+                        -Or-
+        Note: User model extend RankModel
+        HashMap<Integer, Integer> rankList = SwipeDragHelper.getRankHashMap(context, new TypeToken<List<User>>() {});
+        List<User> homeList = new UsersData().getUsersList();
+        if (homeList != null) {
+            for(User item : homeList){
+                Integer rank = rankList.get(item.getId());
+                if(rank != null){
+                    item.setRanking(rank);
+                }
+            }
+            sortArrayList(homeList);
+        }
+        return homeList;
+    }
 
-   public List<User> getHomePageList() {
-           HashMap<Integer, Integer> rankList = getRankList(this);
-           List<User> homeList = new UsersData().getUsersList();
-           if (homeList != null) {
-               for(User item : homeList){
-                   Integer rank = rankList.get(item.getId());
-                   if(rank != null){
-                       item.setRanking(rank);
-                   }
-               }
-               sortArrayList(homeList);
-           }
-           return homeList;
-       }
+    public HashMap<Integer, Integer> getRankList(Context context) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<User> rankList = SwipeDragHelper.getRankList(context, new TypeToken<List<User>>() {
+        });
+        if(rankList != null){
+            for (User item : rankList){
+                map.put(item.getId(), item.getRanking());
+            }
+        }
+        return map;
+    }
 
-       public HashMap<Integer, Integer> getRankList(Context context) {
-           HashMap<Integer, Integer> map = new HashMap<>();
-           List<User> rankList = SwipeDragHelper.getRankList(context, new TypeToken<List<User>>() {
-           });
-           if(rankList != null){
-               for (User item : rankList){
-                   map.put(item.getId(), item.getRanking());
-               }
-           }
-           return map;
-       }
-
-       private void sortArrayList(List<User> list) {
-           Collections.sort(list, new Comparator<User>() {
-               @Override
-               public int compare(User item, User item2) {
-                   Integer value = item.getRanking();
-                   Integer value2 = item2.getRanking();
-                   return value.compareTo(value2);
-               }
-           });
-       }
+    private void sortArrayList(List<User> list) {
+        Collections.sort(list, new Comparator<User>() {
+            @Override
+            public int compare(User item, User item2) {
+                Integer value = item.getRanking();
+                Integer value2 = item2.getRanking();
+                return value.compareTo(value2);
+            }
+        });
+    }
 } 
                                 
 ```
