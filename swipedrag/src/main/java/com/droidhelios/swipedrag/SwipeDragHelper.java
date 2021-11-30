@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidhelios.swipedrag.animation.SDAnimation;
 import com.droidhelios.swipedrag.dragger.SwipeDragStatePreference;
+import com.droidhelios.swipedrag.model.RankModel;
 import com.droidhelios.swipedrag.util.SDConstants;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -55,6 +57,21 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
      */
     public static <T> List<T> getRankList(Context context, TypeToken<List<T>> typeCast) {
         return new SwipeDragStatePreference(context).getRankList(typeCast);
+    }
+    /**
+     * @param typeCast : new TypeToken<List<ModelName>>() {}
+     */
+    public static <T> HashMap<Integer, Integer> getRankHashMap(Context context, TypeToken<List<T>> typeCast) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<T> rankList = new SwipeDragStatePreference(context).getRankList(typeCast);
+        if(rankList != null) {
+            for (T item : rankList) {
+                if (item instanceof RankModel) {
+                    map.put(((RankModel) item).getId(), ((RankModel) item).getRank());
+                }
+            }
+        }
+        return map;
     }
 
     private void attachToRecyclerView() {
