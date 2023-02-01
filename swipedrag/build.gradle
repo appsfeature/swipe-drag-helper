@@ -1,18 +1,12 @@
 apply plugin: 'com.android.library'
 
-apply plugin: 'com.github.dcendents.android-maven'
-
-group='com.github.appsfeature'
-
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
