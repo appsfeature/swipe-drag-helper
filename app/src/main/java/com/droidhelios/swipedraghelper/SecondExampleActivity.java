@@ -27,7 +27,7 @@ import java.util.List;
 
 public class SecondExampleActivity extends AppCompatActivity {
 
-    private List<User> usersList = new ArrayList<>();
+    private final List<User> usersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +95,5 @@ public class SecondExampleActivity extends AppCompatActivity {
             }
         }
         return map;
-    }
-
-
-    public void onOpenClick(View view) {
-        startActivity(new Intent(this, WebViewActivity.class));
     }
 }

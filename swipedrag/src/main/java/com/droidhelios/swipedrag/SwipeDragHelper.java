@@ -1,19 +1,15 @@
 package com.droidhelios.swipedrag;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.droidhelios.swipedrag.animation.SDAnimation;
+import com.droidhelios.swipedrag.dragger.SwipeDrag;
 import com.droidhelios.swipedrag.dragger.SwipeDragStatePreference;
 import com.droidhelios.swipedrag.model.RankModel;
-import com.droidhelios.swipedrag.util.SDConstants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
@@ -23,62 +19,9 @@ import java.util.List;
  * @author Created by Abhijit on 20-11-2019.
  */
 
-public class SwipeDragHelper extends ItemTouchHelper.Callback {
+public interface SwipeDragHelper {
 
-    private final ItemTouchHelper touchHelper;
-    private final RecyclerView recyclerView;
-    private final SwipeDragStatePreference dragDropStateUtil;
-    private final SDAnimation sdAnimation;
-    private final ActionListener contract;
-    private boolean isEnableSwipeOption = false;
-    private boolean isEnableGridView = false;
-    private int disableDragPositionAt = -1;
-    private List<Integer> disableDragPositionList;
-    private boolean isLongPressDragEnabled = false;
-
-    private SwipeDragHelper(RecyclerView recyclerView, ActionListener contract) {
-        this.contract = contract;
-        this.recyclerView = recyclerView;
-        this.touchHelper = new ItemTouchHelper(this);
-        this.sdAnimation = new SDAnimation();
-        this.dragDropStateUtil = new SwipeDragStatePreference(recyclerView.getContext());
-        attachToRecyclerView();
-    }
-
-    /**
-     * @param recyclerView = recyclerView reference
-     * @param adapter      = adapter reference
-     */
-    public static SwipeDragHelper Builder(RecyclerView recyclerView, ActionListener adapter) {
-        return new SwipeDragHelper(recyclerView, adapter);
-    }
-    /**
-     * @param typeCast : new TypeToken<List<ModelName>>() {}
-     */
-    public static <T> List<T> getRankList(Context context, TypeToken<List<T>> typeCast) {
-        return new SwipeDragStatePreference(context).getRankList(typeCast);
-    }
-    /**
-     * @param typeCast : new TypeToken<List<ModelName>>() {}
-     */
-    public static <T> HashMap<Integer, Integer> getRankHashMap(Context context, TypeToken<List<T>> typeCast) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        List<T> rankList = new SwipeDragStatePreference(context).getRankList(typeCast);
-        if(rankList != null) {
-            for (T item : rankList) {
-                if (item instanceof RankModel) {
-                    map.put(((RankModel) item).getId(), ((RankModel) item).getRank());
-                }
-            }
-        }
-        return map;
-    }
-
-    private void attachToRecyclerView() {
-        touchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    public interface ActionListener {
+    interface ActionListener {
         /**
          * User targetUser = usersList.get(oldPosition);
          * usersList.remove(oldPosition);
@@ -98,85 +41,37 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
         }
     }
 
-    public ItemTouchHelper getTouchHelper() {
-        return touchHelper;
+    static SwipeDragHelper Builder(RecyclerView recyclerView, ActionListener adapter) {
+        return SwipeDrag.Builder(recyclerView, adapter);
     }
-
-    public SwipeDragStatePreference getListUtil() {
-        return dragDropStateUtil;
+    /**
+     * @param typeCast : new TypeToken<List<ModelName>>() {}
+     */
+    static <T> List<T> getRankList(Context context, TypeToken<List<T>> typeCast) {
+        return new SwipeDragStatePreference(context).getRankList(typeCast);
     }
-
-    @Override
-    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int dragFlags;
-        if(isEnableGridView) {
-            dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-        }else {
-            dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        }
-        int swipeFlags;
-        if (isEnableSwipeOption) {
-            swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-        } else {
-            swipeFlags = ItemTouchHelper.ACTION_STATE_DRAG;
-        }
-        return makeMovementFlags(dragFlags, swipeFlags);
-    }
-
-    @Override
-    public boolean canDropOver(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder current, @NonNull RecyclerView.ViewHolder target) {
-        if (disableDragPositionAt >= 0) {
-            int position = recyclerView.getChildAdapterPosition(target.itemView);
-            if (position == disableDragPositionAt) {
-                return false;
+    /**
+     * @param typeCast : new TypeToken<List<ModelName>>() {}
+     */
+    static <T> HashMap<Integer, Integer> getRankHashMap(Context context, TypeToken<List<T>> typeCast) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<T> rankList = new SwipeDragStatePreference(context).getRankList(typeCast);
+        if(rankList != null) {
+            for (T item : rankList) {
+                if (item instanceof RankModel) {
+                    map.put(((RankModel) item).getId(), ((RankModel) item).getRank());
+                }
             }
         }
-        if (disableDragPositionList != null) {
-            int position = recyclerView.getChildAdapterPosition(target.itemView);
-            if(disableDragPositionList.contains(position)){
-                return false;
-            }
-        }
-        return super.canDropOver(recyclerView, current, target);
+        return map;
     }
+    void attachToRecyclerView();
 
-    @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        contract.onViewMoved(viewHolder, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-        Log.d("@Alpha", "onMove");
-        return true;
-    }
+    ItemTouchHelper getTouchHelper();
 
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        contract.onViewSwiped(viewHolder.getAdapterPosition());
-    }
+    SwipeDragStatePreference getListUtil();
 
-    @Override
-    public boolean isLongPressDragEnabled() {
-        return isLongPressDragEnabled;
-    }
-
-    @Override
-    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            float alpha = 1 - (Math.abs(dX) / recyclerView.getWidth());
-            viewHolder.itemView.setAlpha(alpha);
-        }
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-    }
-
-    @Override
-    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-        super.onSelectedChanged(viewHolder, actionState);
-        Log.d("@Alpha", "onSelectedChanged");
-
-        contract.onStateChanged(viewHolder, actionState);
-    }
-
-    public void makeMeShake(View view, int speed, int yOffset) {
-        makeMeShake(view, speed, 0, yOffset);
-    }
+    void makeMeShake(View view, int speed, int yOffset);
 
     /**
      * @param view : where animation perform
@@ -184,33 +79,17 @@ public class SwipeDragHelper extends ItemTouchHelper.Callback {
      * @param xOffset : Best value is 5
      * @param yOffset : Best value is 5
      */
-    public void makeMeShake(View view, int speed, int xOffset, int yOffset) {
-        sdAnimation.makeMeShake(view,speed,xOffset,yOffset);
-    }
+    void makeMeShake(View view, int speed, int xOffset, int yOffset);
 
-    public SwipeDragHelper setEnableSwipeOption(boolean isEnableSwipeOption) {
-        this.isEnableSwipeOption = isEnableSwipeOption;
-        return this;
-    }
+    SwipeDragHelper setEnableSwipeOption(boolean isEnableSwipeOption);
 
-    public SwipeDragHelper setEnableGridView(boolean enableGridView) {
-        isEnableGridView = enableGridView;
-        return this;
-    }
+    SwipeDragHelper setEnableGridView(boolean enableGridView);
 
-    public SwipeDragHelper setDisableDragPositionAt(int disableDragPositionAt) {
-        this.disableDragPositionAt = disableDragPositionAt;
-        return this;
-    }
+    SwipeDragHelper setDisableDragPositionAt(int disableDragPositionAt);
 
-    public SwipeDragHelper setDisableDragPositionList(List<Integer> disableDragPositionList) {
-        this.disableDragPositionList = disableDragPositionList;
-        return this;
-    }
+    SwipeDragHelper setDisableDragPositionList(List<Integer> disableDragPositionList);
 
-    public SwipeDragHelper setLongPressDragEnabled(boolean longPressDragEnabled) {
-        isLongPressDragEnabled = longPressDragEnabled;
-        return this;
-    }
+    SwipeDragHelper setLongPressDragEnabled(boolean longPressDragEnabled);
 
+    void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState);
 }
