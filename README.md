@@ -34,7 +34,7 @@ Module-level build.gradle (<module>/build.gradle):
 ```gradle  
 
 dependencies {
-    implementation 'com.github.appsfeature:swipe-drag-helper:x.y'
+    implementation 'com.github.appsfeature:swipe-drag-helper:2.0'
 } 
 ```
 
